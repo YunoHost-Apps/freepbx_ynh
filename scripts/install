@@ -203,13 +203,13 @@ cat >> /etc/odbc.ini << EOF
 [MySQL-asteriskcdrdb]
 Description=MySQL connection to 'db_name' database
 driver=MySQL
+user=$db_user
+password=$db_pass
 server=localhost
 database=db_name
-password=db_pass
 Port=3306
 Socket=/var/run/mysqld/mysqld.sock
 option=3
-  
 EOF
 
 cd /usr/src
