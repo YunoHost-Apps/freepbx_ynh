@@ -54,12 +54,11 @@ ynh_app_setting_set "$app" admin_email "$admin_email"
 [[ ${#admin_pass} -gt 5 ]] || ynh_die \
 "The password is too weak, it must be longer than 5 characters"
 
+#=================================================
+# Installation des dépendances
+#=================================================
 
-
-
-
-sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-service sshd restart
+sudo service sshd restart
 
 sudo apt-get update && apt-get upgrade -y 
 
@@ -76,128 +75,149 @@ sudo apt-get install -y build-essential linux-headers-`uname -r` openssh-server 
 #  Install iksemel
 #=================================================
 
-cd /usr/src
-wget https://iksemel.googlecode.com/files/iksemel-1.4.tar.gz
-tar xf iksemel-1.4.tar.gz
-cd iksemel-*
-./configure
-make
-make install
-ldconfig
+pushd /usr/src
+sudo wget https://iksemel.googlecode.com/files/iksemel-1.4.tar.gz
+sudo tar xf iksemel-1.4.tar.gz
+pushd iksemel-*
+sudo ./configure
+sudo make
+sudo make install
+sudo ldconfig
+popd
+popd
 
 #=================================================
 # Installation of asterisk
 #=================================================
 
-cd /usr/src
-wget http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
-wget http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz
-wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz
-wget -O jansson.tar.gz https://github.com/akheron/jansson/archive/v2.7.tar.gz
-wget http://www.pjsip.org/release/2.4/pjproject-2.4.tar.bz2
+pushd /usr/src
+sudo wget http://downloads.asterisk.org/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-current.tar.gz
+sudo wget http://downloads.asterisk.org/pub/telephony/libpri/libpri-current.tar.gz
+sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz
+sudo wget -O jansson.tar.gz https://github.com/akheron/jansson/archive/v2.7.tar.gz
+sudo wget http://www.pjsip.org/release/2.4/pjproject-2.4.tar.bz2
+popd
 
 #=================================================
 # Installation of DAHDI 
 #=================================================
 
-cd /usr/src
-tar xvfz dahdi-linux-complete-current.tar.gz
-rm -f dahdi-linux-complete-current.tar.gz
-cd dahdi-linux-complete-*
-make all
-make install
-make config
-cd /usr/src
-tar xvfz libpri-current.tar.gz
-rm -f libpri-current.tar.gz
-cd libpri-*
-make
-make install
+pushd /usr/src
+sudo tar xvfz dahdi-linux-complete-current.tar.gz
+sudo rm -f dahdi-linux-complete-current.tar.gz
+puhd dahdi-linux-complete-*
+sudo make all
+sudo make install
+sudo make config
+pushd /usr/src
+sudo tar xvfz libpri-current.tar.gz
+sudo rm -f libpri-current.tar.gz
+pushd libpri-*
+sudo make
+sudo make install
+popd
+popd
+popd
 
 #=================================================
 # Compile and install pjproject
 #=================================================
 
-cd /usr/src
-tar -xjvf pjproject-2.4.tar.bz2
-rm -f pjproject-2.4.tar.bz2
-cd pjproject-2.4
-CFLAGS='-DPJ_HAS_IPV6=1' ./configure --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr
-make dep
-make
-make install
-Compile and Install jansson
-cd /usr/src
-tar vxfz jansson.tar.gz
-rm -f jansson.tar.gz
-cd jansson-*
-autoreconf -i
-./configure
-make
-make install
+pushd /usr/src
+sudo tar -xjvf pjproject-2.4.tar.bz2
+sudo rm -f pjproject-2.4.tar.bz2
+pushd pjproject-2.4
+sudo CFLAGS='-DPJ_HAS_IPV6=1' ./configure --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr
+sudo make dep
+sudo make
+sudo make install
+popd
+popd
+
+#=================================================
+# Compile and Install jansson
+#=================================================
+
+pushd /usr/src
+sudo tar vxfz jansson.tar.gz
+sudo rm -f jansson.tar.gz
+pushd jansson-*
+sudo autoreconf -i
+sudo ./configure
+sudo make
+sudo make install
+popd
+popd
 
 #=================================================
 # Compile and install Asterisk
 #=================================================
 
-cd /usr/src
-tar xvfz asterisk-13-current.tar.gz
-rm -f asterisk-13-current.tar.gz
-cd asterisk-*
-contrib/scripts/get_mp3_source.sh
-contrib/scripts/install_prereq install
-./configure
-make
-make install
-make config
-ldconfig
-update-rc.d -f asterisk remove
-
+pushd /usr/src
+sudo tar xvfz asterisk-13-current.tar.gz
+sudo rm -f asterisk-13-current.tar.gz
+pushd asterisk-*
+sudo sh contrib/scripts/get_mp3_source.sh
+sudo sh contrib/scripts/install_prereq install
+sudo ./configure
+sudo make
+sudo make install
+sudo make config
+sudo ldconfig
+sudo update-rc.d -f asterisk remove
+popd
+popd
 #=================================================
 # Installation of Soundfile of Asterisk
 #=================================================
-cd /var/lib/asterisk/sounds
-wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-core-sounds-en-wav-current.tar.gz
-wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-extra-sounds-en-wav-current.tar.gz
-tar xvf asterisk-core-sounds-en-wav-current.tar.gz
-rm -f asterisk-core-sounds-en-wav-current.tar.gz
-tar xfz asterisk-extra-sounds-en-wav-current.tar.gz
-rm -f asterisk-extra-sounds-en-wav-current.tar.gz
+pushd /var/lib/asterisk/sounds
+sudo wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-core-sounds-en-wav-current.tar.gz
+sudo wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-extra-sounds-en-wav-current.tar.gz
+sudo tar xvf asterisk-core-sounds-en-wav-current.tar.gz
+sudo rm -f asterisk-core-sounds-en-wav-current.tar.gz
+sudo tar xfz asterisk-extra-sounds-en-wav-current.tar.gz
+sudo rm -f asterisk-extra-sounds-en-wav-current.tar.gz
 # Wideband Audio download 
-wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-core-sounds-en-g722-current.tar.gz
-wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-extra-sounds-en-g722-current.tar.gz
-tar xfz asterisk-extra-sounds-en-g722-current.tar.gz
-rm -f asterisk-extra-sounds-en-g722-current.tar.gz
-tar xfz asterisk-core-sounds-en-g722-current.tar.gz
-rm -f asterisk-core-sounds-en-g722-current.tar.gz
+sudo wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-core-sounds-en-g722-current.tar.gz
+sudo wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-extra-sounds-en-g722-current.tar.gz
+sudo tar xfz asterisk-extra-sounds-en-g722-current.tar.gz
+sudo rm -f asterisk-extra-sounds-en-g722-current.tar.gz
+sudo tar xfz asterisk-core-sounds-en-g722-current.tar.gz
+sudo rm -f asterisk-core-sounds-en-g722-current.tar.gz
+popd
 
-mkdir /var/lib/asterisk/sounds/fr
-cd /var/lib/asterisk/sounds/fr
-wget -O core.zip https://www.asterisksounds.org/fr-fr/download/asterisk-sounds-core-fr-FR-sln16.zip
-wget -O extra.zip https://www.asterisksounds.org/fr-fr/download/asterisk-sounds-extra-fr-FR-sln16.zip
-unzip core.zip
-unzip extra.zip
-chown -R asterisk.asterisk /var/lib/asterisk/sounds/fr
+sudo mkdir /var/lib/asterisk/sounds/fr
+pushd /var/lib/asterisk/sounds/fr
+sudo wget -O core.zip https://www.asterisksounds.org/fr-fr/download/asterisk-sounds-core-fr-FR-sln16.zip
+sudo wget -O extra.zip https://www.asterisksounds.org/fr-fr/download/asterisk-sounds-extra-fr-FR-sln16.zip
+sudo unzip core.zip
+sudo unzip extra.zip
+sudo chown -R asterisk.asterisk /var/lib/asterisk/sounds/fr
 find /var/lib/asterisk/sounds/fr -type d -exec chmod 0775 {} \;
+popd
+#=================================================
+# Création de la base de données
+#=================================================
+
+db_name=$app
+db_user=$app
+db_pass=$(ynh_string_random)
+ynh_mysql_create_db "$db_name" "$db_user" "$db_pass"
+ynh_app_setting_set "$app" db_name "$db_name"
+ynh_app_setting_set "$app" db_pass "$db_pass"
+ynh_app_setting_set "$app" db_user "$db_user"
 
 #=================================================
-# Installation of FreePBX
+# Installation of FreePBX + Astérisk
 #=================================================
-useradd -m asterisk
-chown asterisk. /var/run/asterisk
-chown -R asterisk. /etc/asterisk
-chown -R asterisk. /var/{lib,log,spool}/asterisk
-chown -R asterisk. /usr/lib/asterisk
+sudo useradd -m asterisk
+sudo chown asterisk. /var/run/asterisk
+sudo chown -R asterisk. /etc/asterisk
+sudo chown -R asterisk. /var/{lib,log,spool}/asterisk
+sudo chown -R asterisk. /usr/lib/asterisk
 
 
-if [ 'uname -r' = x86_64 ] then
-cat >> /etc/odbcinst.ini << EOF
-[MySQL]
-Description = ODBC for MySQL
-Driver = /usr/lib/x86_64-linux-gnu/odbc/libmyodbc.so
-Setup = /usr/lib/x86_64-linux-gnu/odbc/libodbcmyS.so
-FileUsage = 1
-  else
+
 cat >> /etc/odbcinst.ini << EOF
 [MySQL]
 Description = ODBC for MySQL
@@ -205,9 +225,8 @@ Driver = /usr/lib/x86_64-linux-gnu/odbc/libmyodbc.so
 Setup = /usr/lib/x86_64-linux-gnu/odbc/libodbcmyS.so
 FileUsage = 1
 EOF
-fi
 
-cat >> /etc/odbc.ini << EOF
+sudo cat >> /etc/odbc.ini << EOF
 [MySQL-asteriskcdrdb]
 Description=MySQL connection to 'db_name' database
 driver=MySQL
@@ -221,22 +240,25 @@ option=3
 EOF
 
 cd /usr/src
-wget http://mirror.freepbx.org/modules/packages/freepbx/freepbx-13.0-latest.tgz
-tar vxfz freepbx-13.0-latest.tgz
-rm -f freepbx-13.0-latest.tgz
-cd freepbx
-./start_asterisk start
-./install -n
+sudo wget http://mirror.freepbx.org/modules/packages/freepbx/freepbx-13.0-latest.tgz 
+sudo tar vxfz freepbx-13.0-latest.tgz /var/www/$app --strip-components 1
+sudo rm -f freepbx-13.0-latest.tgz
+sudo cd freepbx
+sudo ./start_asterisk start
+sudo ./install --dbengine="mysql" --dbname="$db_name" --dbuser="$db_user" --dbpass="$db_pass" --webroot="/var/www/$app" -n
 
 sudo cp ../conf/freepbx.service /etc/systemd/system/freepbx.service
 sudo chown root: /etc/systemd/system/freepbx.service
 # Démarrage auto du service
 sudo systemctl enable freepbx.service
 
+#=================================================
 # set up the services
-chkconfig httpd off
-chkconfig php-fpm on
-chkconfig nginx on
-service httpd stop
-service php-fpm reload
-service nginx reload
+#=================================================
+
+sudo chkconfig httpd off
+sudo chkconfig php-fpm on
+sudo chkconfig nginx on
+sudo service httpd stop
+sudo service php-fpm reload
+sudo service nginx reload
