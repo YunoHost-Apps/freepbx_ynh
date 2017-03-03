@@ -176,9 +176,11 @@ sudo ldconfig
 sudo update-rc.d -f asterisk remove
 popd
 popd
+
 #=================================================
 # Installation of Soundfile of Asterisk
 #=================================================
+
 pushd /var/lib/asterisk/sounds
 sudo wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-core-sounds-en-wav-current.tar.gz
 sudo wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-extra-sounds-en-wav-current.tar.gz
@@ -219,13 +221,12 @@ ynh_app_setting_set "$app" db_user "$db_user"
 #=================================================
 # Installation of FreePBX + Astérisk
 #=================================================
+
 sudo useradd -m asterisk
 sudo chown asterisk. /var/run/asterisk
 sudo chown -R asterisk. /etc/asterisk
 sudo chown -R asterisk. /var/{lib,log,spool}/asterisk
 sudo chown -R asterisk. /usr/lib/asterisk
-
-
 
 cat >> /etc/odbcinst.ini << EOF
 [MySQL]
@@ -248,13 +249,15 @@ Socket=/var/run/mysqld/mysqld.sock
 option=3
 EOF
 
-cd /usr/src
+pushd /usr/src
 sudo wget http://mirror.freepbx.org/modules/packages/freepbx/freepbx-13.0-latest.tgz 
 sudo tar vxfz freepbx-13.0-latest.tgz /var/www/$app --strip-components 1
 sudo rm -f freepbx-13.0-latest.tgz
-sudo cd freepbx
+sudo pushd freepbx
 sudo ./start_asterisk start
 sudo ./install --dbengine="mysql" --dbname="$db_name" --dbuser="$db_user" --dbpass="$db_pass" --webroot="/var/www/$app" -n
+popd
+popd
 
 sudo cp ../conf/freepbx.service /etc/systemd/system/freepbx.service
 sudo chown root: /etc/systemd/system/freepbx.service
