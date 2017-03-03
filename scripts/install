@@ -219,3 +219,10 @@ rm -f freepbx-13.0-latest.tgz
 cd freepbx
 ./start_asterisk start
 ./install -n
+
+sudo cp ../conf/freepbx.service /etc/systemd/system/freepbx.service
+sudo chown root: /etc/systemd/system/freepbx.service
+# Démarrage auto du service
+sudo systemctl enable freepbx.service
+
+
