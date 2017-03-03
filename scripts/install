@@ -156,7 +156,6 @@ update-rc.d -f asterisk remove
 #=================================================
 # Installation of Soundfile of Asterisk
 #=================================================
-
 cd /var/lib/asterisk/sounds
 wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-core-sounds-en-wav-current.tar.gz
 wget http://downloads.asterisk.org/pub/telephony/sounds/asterisk-extra-sounds-en-wav-current.tar.gz
@@ -171,6 +170,8 @@ tar xfz asterisk-extra-sounds-en-g722-current.tar.gz
 rm -f asterisk-extra-sounds-en-g722-current.tar.gz
 tar xfz asterisk-core-sounds-en-g722-current.tar.gz
 rm -f asterisk-core-sounds-en-g722-current.tar.gz
+
+mkdir /var/lib/asterisk/sounds/fr
 
 #=================================================
 # Installation of FreePBX
@@ -225,4 +226,10 @@ sudo chown root: /etc/systemd/system/freepbx.service
 # Démarrage auto du service
 sudo systemctl enable freepbx.service
 
-
+# set up the services
+chkconfig httpd off
+chkconfig php-fpm on
+chkconfig nginx on
+service httpd stop
+service php-fpm reload
+service nginx reload
