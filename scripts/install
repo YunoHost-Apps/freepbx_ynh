@@ -55,6 +55,17 @@ ynh_app_setting_set "$app" admin_email "$admin_email"
 "The password is too weak, it must be longer than 5 characters"
 
 #=================================================
+# Nginx Configuration
+#=================================================
+
+sed -i "s@YNH_WWW_PATH@$path_url@g" $nginxconf
+sed -i "s@YNH_WWW_ALIAS@$final_path@g" $nginxconf
+sudo chown root: $nginxconf
+sudo chmod 644 $nginxconf
+sudo cp $nginxconf /etc/nginx/conf.d/$domain.d/$app.conf
+
+
+#=================================================
 # Installation des dépendances
 #=================================================
 
