@@ -22,8 +22,6 @@ ynh_check_error	# Active trap pour arrêter le script si une erreur est détect�
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
-admin_name=$YNH_APP_ARG_ADMIN_NAME
-admin_pass=$YNH_APP_ARG_ADMIN_PASS
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -42,8 +40,6 @@ CHECK_FINALPATH	# Vérifie que le dossier de destination n'est pas déjà utilis
 
 user="$app"
 ynh_app_setting_set "$app" is_public "$is_public"
-ynh_app_setting_set "$app" admin_pass "$admin_pass"
-ynh_app_setting_set "$app" admin_name "$admin_name"
 
 #=================================================
 # Check password strength
