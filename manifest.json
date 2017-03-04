@@ -49,24 +49,6 @@
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
-            },
-            {
-                "name": "admin_name",
-                "type": "user",
-                "ask": {
-                    "en": "Choose the FreePBX administrator (must be an existing YunoHost user)",
-                    "fr": "Choisissez l'administrateur de FreePBX (doit être un utilisateur YunoHost existant)"
-                },
-                "example": "homer"
-            },
-            {
-                "name": "admin_pass",
-                "type": "password",
-                "ask": {
-                    "en": "Set the password for the Admin user ≥ 5 character",
-                    "fr": "Définissez le mot de passe pour l'Administrateur. ≥ cinq charactères"
-                },
-                "example": "myreallystrengthpassword"
             }
         ]
     }
