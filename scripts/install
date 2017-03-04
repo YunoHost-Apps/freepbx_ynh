@@ -102,7 +102,7 @@ popd
 pushd /usr/src
 sudo tar xvfz dahdi-linux-complete-current.tar.gz
 sudo rm -f dahdi-linux-complete-current.tar.gz
-puhd dahdi-linux-complete-*
+pushd dahdi-linux-complete-*
 sudo make all
 sudo make install
 sudo make config
