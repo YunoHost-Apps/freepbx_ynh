@@ -44,7 +44,7 @@ ynh_app_setting_set "$app" is_public "$is_public"
 #=================================================
 # Nginx Configuration
 #=================================================
-
+final_path=/var/www/$app
 sed -i "s@YNH_WWW_PATH@$path_url@g" $nginxconf
 sed -i "s@YNH_WWW_ALIAS@$final_path@g" $nginxconf
 sudo chown root: $nginxconf
