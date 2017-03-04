@@ -67,14 +67,6 @@
                     "fr": "Définissez le mot de passe pour l'Administrateur. ≥ cinq charactères"
                 },
                 "example": "myreallystrengthpassword"
-            },
-            {
-                "name": "admin_email",
-                "type": "email",
-                "ask": {
-                    "fr": "Votre adresse mail."
-                },
-                "exemple": "abc@efg.hi"
             }
         ]
     }
