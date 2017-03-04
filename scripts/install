@@ -72,9 +72,8 @@ sudo apt-get install -y build-essential linux-headers-`uname -r` openssh-server\
 #=================================================
 
 pushd /usr/src
-sudo wget https://iksemel.googlecode.com/files/iksemel-1.4.tar.gz
-sudo tar xf iksemel-1.4.tar.gz
-pushd iksemel-*
+sudo git clone https://github.com/meduketto/iksemel.git /usr/src/iksemel
+pushd iksemel
 sudo ./configure
 sudo make
 sudo make install
