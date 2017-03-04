@@ -42,13 +42,6 @@ user="$app"
 ynh_app_setting_set "$app" is_public "$is_public"
 
 #=================================================
-# Check password strength
-#=================================================
-
-[[ ${#admin_pass} -gt 5 ]] || ynh_die \
-"The password is too weak, it must be longer than 5 characters"
-
-#=================================================
 # Nginx Configuration
 #=================================================
 
